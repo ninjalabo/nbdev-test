@@ -5,3 +5,6 @@ website:
       - 00_core.ipynb
       - 01_setup.ipynb
       - 02_workflow.ipynb
+      - section: Additional
+        contents:
+          - Additional/01_additional.ipynb
