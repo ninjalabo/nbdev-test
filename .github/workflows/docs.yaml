@@ -31,7 +31,9 @@ jobs:
 
       # Step 4: Generate documentation
       - name: Generate documentation
-        run: nbdev_docs
+        run: |
+          pip install -e ".[dev]"
+          nbdev_docs
 
       # Step 5: Commit and push files from _docs to the root folder
       - name: Commit and push docs to root
@@ -55,4 +57,3 @@ jobs:
           
           # Push changes to the docs branch
           git push --force origin docs
-          
