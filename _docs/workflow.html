@@ -1,0 +1,1645 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="Example workflow for how to utilize nbdev for experimenting and exporting your module.">
+
+<title>Workflow – nbdev-test</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="Workflow – nbdev-test">
+<meta property="og:description" content="Example workflow for how to utilize nbdev for experimenting and exporting your module.">
+<meta property="og:site_name" content="nbdev-test">
+<meta name="twitter:title" content="Workflow – nbdev-test">
+<meta name="twitter:description" content="Example workflow for how to utilize nbdev for experimenting and exporting your module.">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">nbdev-test</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools tools-end">
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./workflow.html">Workflow</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">nbdev-test</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./core.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">core</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Setup</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./workflow.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Workflow</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Additional</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Additional/additional.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Additional</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#step-1---experimental-notebook" id="toc-step-1---experimental-notebook" class="nav-link active" data-scroll-target="#step-1---experimental-notebook">Step 1 - Experimental Notebook</a>
+  <ul class="collapse">
+  <li><a href="#notebook-content" id="toc-notebook-content" class="nav-link" data-scroll-target="#notebook-content">Notebook Content</a></li>
+  </ul></li>
+  <li><a href="#step-2---refine-modularize-code" id="toc-step-2---refine-modularize-code" class="nav-link" data-scroll-target="#step-2---refine-modularize-code">Step 2 - Refine &amp; Modularize Code</a>
+  <ul class="collapse">
+  <li><a href="#notebook-content-1" id="toc-notebook-content-1" class="nav-link" data-scroll-target="#notebook-content-1">Notebook Content</a></li>
+  </ul></li>
+  <li><a href="#step-3---export-module" id="toc-step-3---export-module" class="nav-link" data-scroll-target="#step-3---export-module">Step 3 - Export Module</a>
+  <ul class="collapse">
+  <li><a href="#change-in-setting.ini" id="toc-change-in-setting.ini" class="nav-link" data-scroll-target="#change-in-setting.ini">Change in <code>setting.ini</code></a></li>
+  <li><a href="#notebook-content-2" id="toc-notebook-content-2" class="nav-link" data-scroll-target="#notebook-content-2">Notebook Content</a></li>
+  <li><a href="#catordogimageclassifier" id="toc-catordogimageclassifier" class="nav-link" data-scroll-target="#catordogimageclassifier">CatOrDogImageClassifier</a></li>
+  <li><a href="#change-in-nbdev_test-module" id="toc-change-in-nbdev_test-module" class="nav-link" data-scroll-target="#change-in-nbdev_test-module">Change in <code>nbdev_test</code> module</a></li>
+  </ul></li>
+  <li><a href="#step-4---create-documentation" id="toc-step-4---create-documentation" class="nav-link" data-scroll-target="#step-4---create-documentation">Step 4 - Create Documentation</a>
+  <ul class="collapse">
+  <li><a href="#notebook-content-3" id="toc-notebook-content-3" class="nav-link" data-scroll-target="#notebook-content-3">Notebook Content</a></li>
+  <li><a href="#catordogimageclassifier-1" id="toc-catordogimageclassifier-1" class="nav-link" data-scroll-target="#catordogimageclassifier-1">CatOrDogImageClassifier</a></li>
+  <li><a href="#catordogimageclassifier.predict" id="toc-catordogimageclassifier.predict" class="nav-link" data-scroll-target="#catordogimageclassifier.predict">CatOrDogImageClassifier.predict</a></li>
+  </ul></li>
+  <li><a href="#tips" id="toc-tips" class="nav-link" data-scroll-target="#tips">Tips</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/ninjalabo/nbdev-test/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div><div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="workflow.html.md"><i class="bi bi-file-code"></i>CommonMark</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Workflow</h1>
+</div>
+
+<div>
+  <div class="description">
+    Example workflow for how to utilize <code>nbdev</code> for experimenting and exporting your module.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<p>This workflow builds upon the process of developing a model for differentiating between pictures of cats and dogs. The source code and documentation is from https://docs.fast.ai/tutorial.vision.html.</p>
+<p>We can use <code>nbdev</code> to seamlessly generate Python module and documentation from your experimental notebook. From this point onwards, all section represents one step, i.e., a newly modified version or an addition to your notebook from the previous step.</p>
+<section id="step-1---experimental-notebook" class="level2">
+<h2 class="anchored" data-anchor-id="step-1---experimental-notebook">Step 1 - Experimental Notebook</h2>
+<p>At this stage, the notebook is mostly for experimenting with ideas and code. The notebook itself can just be as following:</p>
+<ul>
+<li>Install <code>fastai</code> library</li>
+<li>Download PETS dataset which include images of cats and dogs</li>
+<li>Construct dataloader from dataset</li>
+<li>Fine-tune pretrained model</li>
+</ul>
+<section id="notebook-content" class="level3">
+<h3 class="anchored" data-anchor-id="notebook-content">Notebook Content</h3>
+<div id="58050604-be51-4b03-9664-dc666324cdc1" class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>pip install fastai</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Requirement already satisfied: fastai in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (2.7.17)
+Requirement already satisfied: pip in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from fastai) (24.2)
+Requirement already satisfied: packaging in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from fastai) (24.1)
+Requirement already satisfied: fastdownload&lt;2,&gt;=0.0.5 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from fastai) (0.0.7)
+Requirement already satisfied: fastcore&lt;1.8,&gt;=1.5.29 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from fastai) (1.7.16)
+Requirement already satisfied: torchvision&gt;=0.11 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from fastai) (0.19.1)
+Requirement already satisfied: matplotlib in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from fastai) (3.9.2)
+Requirement already satisfied: pandas in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from fastai) (2.2.3)
+Requirement already satisfied: requests in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from fastai) (2.32.3)
+Requirement already satisfied: pyyaml in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from fastai) (6.0.2)
+Requirement already satisfied: fastprogress&gt;=0.2.4 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from fastai) (1.0.3)
+Requirement already satisfied: pillow&gt;=9.0.0 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from fastai) (11.0.0)
+Requirement already satisfied: scikit-learn in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from fastai) (1.5.2)
+Requirement already satisfied: scipy in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from fastai) (1.14.1)
+Requirement already satisfied: spacy&lt;4 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from fastai) (3.8.2)
+Requirement already satisfied: torch&lt;2.5,&gt;=1.10 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from fastai) (2.4.1)
+Requirement already satisfied: spacy-legacy&lt;3.1.0,&gt;=3.0.11 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from spacy&lt;4-&gt;fastai) (3.0.12)
+Requirement already satisfied: spacy-loggers&lt;2.0.0,&gt;=1.0.0 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from spacy&lt;4-&gt;fastai) (1.0.5)
+Requirement already satisfied: murmurhash&lt;1.1.0,&gt;=0.28.0 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from spacy&lt;4-&gt;fastai) (1.0.10)
+Requirement already satisfied: cymem&lt;2.1.0,&gt;=2.0.2 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from spacy&lt;4-&gt;fastai) (2.0.8)
+Requirement already satisfied: preshed&lt;3.1.0,&gt;=3.0.2 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from spacy&lt;4-&gt;fastai) (3.0.9)
+Requirement already satisfied: thinc&lt;8.4.0,&gt;=8.3.0 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from spacy&lt;4-&gt;fastai) (8.3.2)
+Requirement already satisfied: wasabi&lt;1.2.0,&gt;=0.9.1 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from spacy&lt;4-&gt;fastai) (1.1.3)
+Requirement already satisfied: srsly&lt;3.0.0,&gt;=2.4.3 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from spacy&lt;4-&gt;fastai) (2.4.8)
+Requirement already satisfied: catalogue&lt;2.1.0,&gt;=2.0.6 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from spacy&lt;4-&gt;fastai) (2.0.10)
+Requirement already satisfied: weasel&lt;0.5.0,&gt;=0.1.0 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from spacy&lt;4-&gt;fastai) (0.4.1)
+Requirement already satisfied: typer&lt;1.0.0,&gt;=0.3.0 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from spacy&lt;4-&gt;fastai) (0.12.5)
+Requirement already satisfied: tqdm&lt;5.0.0,&gt;=4.38.0 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from spacy&lt;4-&gt;fastai) (4.66.5)
+Requirement already satisfied: pydantic!=1.8,!=1.8.1,&lt;3.0.0,&gt;=1.7.4 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from spacy&lt;4-&gt;fastai) (2.9.2)
+Requirement already satisfied: jinja2 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from spacy&lt;4-&gt;fastai) (3.1.4)
+Requirement already satisfied: setuptools in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from spacy&lt;4-&gt;fastai) (75.1.0)
+Requirement already satisfied: langcodes&lt;4.0.0,&gt;=3.2.0 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from spacy&lt;4-&gt;fastai) (3.4.1)
+Requirement already satisfied: numpy&gt;=1.19.0 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from spacy&lt;4-&gt;fastai) (2.0.2)
+Requirement already satisfied: charset-normalizer&lt;4,&gt;=2 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from requests-&gt;fastai) (3.4.0)
+Requirement already satisfied: idna&lt;4,&gt;=2.5 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from requests-&gt;fastai) (3.10)
+Requirement already satisfied: urllib3&lt;3,&gt;=1.21.1 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from requests-&gt;fastai) (2.2.3)
+Requirement already satisfied: certifi&gt;=2017.4.17 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from requests-&gt;fastai) (2024.8.30)
+Requirement already satisfied: filelock in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from torch&lt;2.5,&gt;=1.10-&gt;fastai) (3.16.1)
+Requirement already satisfied: typing-extensions&gt;=4.8.0 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from torch&lt;2.5,&gt;=1.10-&gt;fastai) (4.12.2)
+Requirement already satisfied: sympy in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from torch&lt;2.5,&gt;=1.10-&gt;fastai) (1.13.3)
+Requirement already satisfied: networkx in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from torch&lt;2.5,&gt;=1.10-&gt;fastai) (3.4.1)
+Requirement already satisfied: fsspec in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from torch&lt;2.5,&gt;=1.10-&gt;fastai) (2024.9.0)
+Requirement already satisfied: nvidia-cuda-nvrtc-cu12==12.1.105 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from torch&lt;2.5,&gt;=1.10-&gt;fastai) (12.1.105)
+Requirement already satisfied: nvidia-cuda-runtime-cu12==12.1.105 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from torch&lt;2.5,&gt;=1.10-&gt;fastai) (12.1.105)
+Requirement already satisfied: nvidia-cuda-cupti-cu12==12.1.105 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from torch&lt;2.5,&gt;=1.10-&gt;fastai) (12.1.105)
+Requirement already satisfied: nvidia-cudnn-cu12==9.1.0.70 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from torch&lt;2.5,&gt;=1.10-&gt;fastai) (9.1.0.70)
+Requirement already satisfied: nvidia-cublas-cu12==12.1.3.1 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from torch&lt;2.5,&gt;=1.10-&gt;fastai) (12.1.3.1)
+Requirement already satisfied: nvidia-cufft-cu12==11.0.2.54 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from torch&lt;2.5,&gt;=1.10-&gt;fastai) (11.0.2.54)
+Requirement already satisfied: nvidia-curand-cu12==10.3.2.106 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from torch&lt;2.5,&gt;=1.10-&gt;fastai) (10.3.2.106)
+Requirement already satisfied: nvidia-cusolver-cu12==11.4.5.107 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from torch&lt;2.5,&gt;=1.10-&gt;fastai) (11.4.5.107)
+Requirement already satisfied: nvidia-cusparse-cu12==12.1.0.106 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from torch&lt;2.5,&gt;=1.10-&gt;fastai) (12.1.0.106)
+Requirement already satisfied: nvidia-nccl-cu12==2.20.5 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from torch&lt;2.5,&gt;=1.10-&gt;fastai) (2.20.5)
+Requirement already satisfied: nvidia-nvtx-cu12==12.1.105 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from torch&lt;2.5,&gt;=1.10-&gt;fastai) (12.1.105)
+Requirement already satisfied: triton==3.0.0 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from torch&lt;2.5,&gt;=1.10-&gt;fastai) (3.0.0)
+Requirement already satisfied: nvidia-nvjitlink-cu12 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from nvidia-cusolver-cu12==11.4.5.107-&gt;torch&lt;2.5,&gt;=1.10-&gt;fastai) (12.6.77)
+Requirement already satisfied: contourpy&gt;=1.0.1 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from matplotlib-&gt;fastai) (1.3.0)
+Requirement already satisfied: cycler&gt;=0.10 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from matplotlib-&gt;fastai) (0.12.1)
+Requirement already satisfied: fonttools&gt;=4.22.0 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from matplotlib-&gt;fastai) (4.54.1)
+Requirement already satisfied: kiwisolver&gt;=1.3.1 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from matplotlib-&gt;fastai) (1.4.7)
+Requirement already satisfied: pyparsing&gt;=2.3.1 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from matplotlib-&gt;fastai) (3.2.0)
+Requirement already satisfied: python-dateutil&gt;=2.7 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from matplotlib-&gt;fastai) (2.9.0)
+Requirement already satisfied: pytz&gt;=2020.1 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from pandas-&gt;fastai) (2024.2)
+Requirement already satisfied: tzdata&gt;=2022.7 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from pandas-&gt;fastai) (2024.2)
+Requirement already satisfied: joblib&gt;=1.2.0 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from scikit-learn-&gt;fastai) (1.4.2)
+Requirement already satisfied: threadpoolctl&gt;=3.1.0 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from scikit-learn-&gt;fastai) (3.5.0)
+Requirement already satisfied: language-data&gt;=1.2 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from langcodes&lt;4.0.0,&gt;=3.2.0-&gt;spacy&lt;4-&gt;fastai) (1.2.0)
+Requirement already satisfied: annotated-types&gt;=0.6.0 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from pydantic!=1.8,!=1.8.1,&lt;3.0.0,&gt;=1.7.4-&gt;spacy&lt;4-&gt;fastai) (0.7.0)
+Requirement already satisfied: pydantic-core==2.23.4 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from pydantic!=1.8,!=1.8.1,&lt;3.0.0,&gt;=1.7.4-&gt;spacy&lt;4-&gt;fastai) (2.23.4)
+Requirement already satisfied: six&gt;=1.5 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from python-dateutil&gt;=2.7-&gt;matplotlib-&gt;fastai) (1.16.0)
+Requirement already satisfied: blis&lt;1.1.0,&gt;=1.0.0 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from thinc&lt;8.4.0,&gt;=8.3.0-&gt;spacy&lt;4-&gt;fastai) (1.0.1)
+Requirement already satisfied: confection&lt;1.0.0,&gt;=0.0.1 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from thinc&lt;8.4.0,&gt;=8.3.0-&gt;spacy&lt;4-&gt;fastai) (0.1.5)
+Requirement already satisfied: click&gt;=8.0.0 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from typer&lt;1.0.0,&gt;=0.3.0-&gt;spacy&lt;4-&gt;fastai) (8.1.7)
+Requirement already satisfied: shellingham&gt;=1.3.0 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from typer&lt;1.0.0,&gt;=0.3.0-&gt;spacy&lt;4-&gt;fastai) (1.5.4)
+Requirement already satisfied: rich&gt;=10.11.0 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from typer&lt;1.0.0,&gt;=0.3.0-&gt;spacy&lt;4-&gt;fastai) (13.9.2)
+Requirement already satisfied: cloudpathlib&lt;1.0.0,&gt;=0.7.0 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from weasel&lt;0.5.0,&gt;=0.1.0-&gt;spacy&lt;4-&gt;fastai) (0.19.0)
+Requirement already satisfied: smart-open&lt;8.0.0,&gt;=5.2.1 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from weasel&lt;0.5.0,&gt;=0.1.0-&gt;spacy&lt;4-&gt;fastai) (7.0.5)
+Requirement already satisfied: MarkupSafe&gt;=2.0 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from jinja2-&gt;spacy&lt;4-&gt;fastai) (3.0.1)
+Requirement already satisfied: mpmath&lt;1.4,&gt;=1.1.0 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from sympy-&gt;torch&lt;2.5,&gt;=1.10-&gt;fastai) (1.3.0)
+Requirement already satisfied: marisa-trie&gt;=0.7.7 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from language-data&gt;=1.2-&gt;langcodes&lt;4.0.0,&gt;=3.2.0-&gt;spacy&lt;4-&gt;fastai) (1.2.1)
+Requirement already satisfied: markdown-it-py&gt;=2.2.0 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from rich&gt;=10.11.0-&gt;typer&lt;1.0.0,&gt;=0.3.0-&gt;spacy&lt;4-&gt;fastai) (3.0.0)
+Requirement already satisfied: pygments&lt;3.0.0,&gt;=2.13.0 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from rich&gt;=10.11.0-&gt;typer&lt;1.0.0,&gt;=0.3.0-&gt;spacy&lt;4-&gt;fastai) (2.18.0)
+Requirement already satisfied: wrapt in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from smart-open&lt;8.0.0,&gt;=5.2.1-&gt;weasel&lt;0.5.0,&gt;=0.1.0-&gt;spacy&lt;4-&gt;fastai) (1.16.0)
+Requirement already satisfied: mdurl~=0.1 in /home/nghivo/miniconda3/envs/nbdev-test/lib/python3.12/site-packages (from markdown-it-py&gt;=2.2.0-&gt;rich&gt;=10.11.0-&gt;typer&lt;1.0.0,&gt;=0.3.0-&gt;spacy&lt;4-&gt;fastai) (0.1.2)</code></pre>
+</div>
+</div>
+<div id="feaf83ea-1494-47c8-8d8d-7cce73d807a4" class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Import from fastai</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fastai.vision.<span class="bu">all</span> <span class="im">import</span> <span class="op">*</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="2b3e6d51-aef4-4377-bafe-371c24f53686" class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Download PETS dataset</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>path <span class="op">=</span> untar_data(URLs.PETS)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>path.ls()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div>
+<div class="cell-output cell-output-display">
+
+    <div>
+      <progress value="811712512" class="" max="811706944" style="width:300px; height:20px; vertical-align: middle;"></progress>
+      100.00% [811712512/811706944 01:10&lt;00:00]
+    </div>
+    
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>(#2) [Path('/home/nghivo/.fastai/data/oxford-iiit-pet/images'),Path('/home/nghivo/.fastai/data/oxford-iiit-pet/annotations')]</code></pre>
+</div>
+</div>
+<div id="93735c93-670a-4b2c-a80d-cdb6c5d54843" class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract images</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>files <span class="op">=</span> get_image_files(path<span class="op">/</span><span class="st">"images"</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="bu">len</span>(files)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>7390</code></pre>
+</div>
+</div>
+<div id="d58e5a68-e2b5-47df-b9c7-086394526ef9" class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create dataset loader</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> label_func(f): <span class="cf">return</span> f[<span class="dv">0</span>].isupper()</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>dls <span class="op">=</span> ImageDataLoaders.from_name_func(path, files, label_func, item_tfms<span class="op">=</span>Resize(<span class="dv">224</span>))</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>dls.show_batch()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02_workflow_files/figure-html/cell-6-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="5c3e1c48-76e6-433f-925a-2b2b25938c28" class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fine-tune model from pretrained</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>learn <span class="op">=</span> vision_learner(dls, resnet34, metrics<span class="op">=</span>error_rate)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>learn.fine_tune(<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Downloading: "https://download.pytorch.org/models/resnet34-b627a593.pth" to /home/nghivo/.cache/torch/hub/checkpoints/resnet34-b627a593.pth
+100%|██████████████████████████████████████████████████████████████████████████████| 83.3M/83.3M [00:07&lt;00:00, 11.6MB/s]</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">epoch</th>
+<th data-quarto-table-cell-role="th">train_loss</th>
+<th data-quarto-table-cell-role="th">valid_loss</th>
+<th data-quarto-table-cell-role="th">error_rate</th>
+<th data-quarto-table-cell-role="th">time</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>0.150972</td>
+<td>0.024604</td>
+<td>0.008796</td>
+<td>00:22</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">epoch</th>
+<th data-quarto-table-cell-role="th">train_loss</th>
+<th data-quarto-table-cell-role="th">valid_loss</th>
+<th data-quarto-table-cell-role="th">error_rate</th>
+<th data-quarto-table-cell-role="th">time</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>0.057303</td>
+<td>0.012587</td>
+<td>0.005413</td>
+<td>00:28</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="8520fd4e-091b-4e80-a726-396212656386" class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>learn.show_results()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div>
+<div class="cell-output cell-output-display">
+
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02_workflow_files/figure-html/cell-8-output-3.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="ec8bcefd-73ba-40f9-b0a8-dce3f281bb1c" class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict a single image</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>learn.predict(files[<span class="dv">0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div>
+<div class="cell-output cell-output-display">
+
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>('False', tensor(0), tensor([1.0000e+00, 9.0949e-08]))</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="step-2---refine-modularize-code" class="level2">
+<h2 class="anchored" data-anchor-id="step-2---refine-modularize-code">Step 2 - Refine &amp; Modularize Code</h2>
+<p>At this stage, suppose the developer wants to create a function that generates a predictor for single image classification between cats and dogs. The notebook now mostly involves modularizing the existing code into reusable functions, including the following:</p>
+<ul>
+<li>Class for Cat/Dog image classifier</li>
+<li>Function for generating from pretrained model</li>
+<li>Function for predicting a single image<br>
+</li>
+<li>Use case with test</li>
+</ul>
+<p><strong>NOTE</strong><br>
+In this workflow, OOP (Object-Oriented Programming) is used for modularizing the code. However,it is entirely possible that we use functional programming instead. It is also possible that we skip this step and export this script as it is.</p>
+<section id="notebook-content-1" class="level3">
+<h3 class="anchored" data-anchor-id="notebook-content-1">Notebook Content</h3>
+<section id="experimental-notebook" class="level4">
+<h4 class="anchored" data-anchor-id="experimental-notebook">Experimental notebook…</h4>
+</section>
+<section id="module" class="level4">
+<h4 class="anchored" data-anchor-id="module">Module</h4>
+<div id="b722212c-dc7c-42fa-8b71-2921567eb183" class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Import from fastai</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fastai.vision.<span class="bu">all</span> <span class="im">import</span> <span class="op">*</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="6e131007-6f06-4062-848f-1e3dbaee9892" class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Original code from https://docs.fast.ai/examples/app_examples.html</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Class for Cat/Dog image</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> CatOrDogImageClassifier:</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">"Classifier between cat and dog images"</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>,</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>        arch<span class="op">=</span>resnet34,  <span class="co"># Pretrained model architecture</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>        metrics<span class="op">=</span>error_rate,  <span class="co"># Metrics to be used</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    ):</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>        <span class="co">"Generate classifier from pretrained model"</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Form dataset loader</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>        set_seed(<span class="dv">99</span>, <span class="va">True</span>)</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>        path <span class="op">=</span> untar_data(URLs.PETS)<span class="op">/</span><span class="st">'images'</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>        dls <span class="op">=</span> ImageDataLoaders.from_name_func(</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>            path, get_image_files(path), valid_pct<span class="op">=</span><span class="fl">0.2</span>,</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>            label_func<span class="op">=</span><span class="kw">lambda</span> x: x[<span class="dv">0</span>].isupper(), item_tfms<span class="op">=</span>Resize(<span class="dv">224</span>))</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Create and fine-tune learner</span></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>        learner <span class="op">=</span> vision_learner(dls, arch, metrics<span class="op">=</span>metrics).to_fp16()</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>        learner.fine_tune(<span class="dv">1</span>)</span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.learner <span class="op">=</span> learner</span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> predict(<span class="va">self</span>, file_path: <span class="bu">str</span>):</span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>        <span class="co">"Predict a single image with the learner"</span></span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Extract prediction with learner</span></span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>        img <span class="op">=</span> PILImage.create(file_path)</span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a>        prediction <span class="op">=</span> <span class="va">self</span>.learner.predict(img)</span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a>        label <span class="op">=</span> <span class="st">'Cat'</span> <span class="cf">if</span> prediction[<span class="dv">0</span>]<span class="op">==</span><span class="st">'True'</span> <span class="cf">else</span> <span class="st">'Dog'</span></span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a>        dog_prob <span class="op">=</span> prediction[<span class="dv">2</span>][<span class="dv">0</span>].item()</span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a>        cat_prob <span class="op">=</span> prediction[<span class="dv">2</span>][<span class="dv">1</span>].item()</span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Print the results</span></span>
+<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"The animal in this picture is: </span><span class="sc">{</span>label<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Probability of 'Dog': </span><span class="sc">{</span>dog_prob<span class="sc">:.6f}</span><span class="ss">"</span>)</span>
+<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Probability of 'Cat': </span><span class="sc">{</span>cat_prob<span class="sc">:.6f}</span><span class="ss">"</span>)</span>
+<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb15-40"><a href="#cb15-40" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Return the results</span></span>
+<span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> label, dog_prob, cat_prob</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="f3c50348-ca61-4afc-8217-85ffc945b05b" class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use case</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>classifer <span class="op">=</span> CatOrDogImageClassifier()</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>label, dog_prob, cat_prob <span class="op">=</span> classifer.predict(<span class="st">"images/cat.jpg"</span>)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Image should be predicted as 'Cat'</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> label<span class="op">==</span><span class="st">'Cat'</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> cat_prob <span class="op">&gt;</span> <span class="fl">0.5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">epoch</th>
+<th data-quarto-table-cell-role="th">train_loss</th>
+<th data-quarto-table-cell-role="th">valid_loss</th>
+<th data-quarto-table-cell-role="th">error_rate</th>
+<th data-quarto-table-cell-role="th">time</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>0.147156</td>
+<td>0.022813</td>
+<td>0.008119</td>
+<td>00:16</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">epoch</th>
+<th data-quarto-table-cell-role="th">train_loss</th>
+<th data-quarto-table-cell-role="th">valid_loss</th>
+<th data-quarto-table-cell-role="th">error_rate</th>
+<th data-quarto-table-cell-role="th">time</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>0.051962</td>
+<td>0.031823</td>
+<td>0.011502</td>
+<td>00:20</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div>
+<div class="cell-output cell-output-display">
+
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The animal in this picture is: Cat
+Probability of 'Dog': 0.000073
+Probability of 'Cat': 0.999927</code></pre>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="step-3---export-module" class="level2">
+<h2 class="anchored" data-anchor-id="step-3---export-module">Step 3 - Export Module</h2>
+<p>At this stage, the developer needs to export these functions for future usage. <code>nbdev</code> provides an easy option for turning the written code in Jupyter Notebook into installable Python module. The export will involve multiple files, including the previous notebook. The changes to be made are as follows:</p>
+<ul>
+<li>Add all external libraries to <code>setting.ini</code><br>
+</li>
+<li>Add <code>#| default_exp &lt;name&gt;</code> to notebook to export into a new file with similar name</li>
+<li>Add <code>#| export</code> to all relevant cells in notebook<br>
+</li>
+<li>Use <code>nbdev_export</code> in CLI or add Jupyter Notebook cell for exporting with <code>nbdev.nbdev_export()</code><br>
+</li>
+<li>Check the exported module</li>
+<li>Install exported module in developer mode with <code>pip install -e '.[dev]'</code> (if not already)</li>
+<li>Use the exported module with <code>from nbdev_test.&lt;name&gt; import *</code></li>
+</ul>
+<p><strong>NOTE</strong><br>
+If encountering errors in importing the new module, try:<br>
+- Running <code>pip install -e .</code> again<br>
+- Restarting Jupyter notebook or Python kernel<br>
+- Running <code>nbdev_prepare</code> in CLI</p>
+<section id="change-in-setting.ini" class="level3">
+<h3 class="anchored" data-anchor-id="change-in-setting.ini">Change in <code>setting.ini</code></h3>
+<p>All external libraries are to be added into the <code>setting.ini</code> file. In this workflow, we are only using <code>fastai</code> library version <code>2.7.17</code>. To set this requirement in <code>setting.ini</code>, we need to add a line for requirement (or uncommenting the default requirement line):</p>
+<pre><code>### Optional ###
+requirements = fastai</code></pre>
+<p>If we want to specify version (recommended to avoid future compatibility issues), we can set this to:</p>
+<pre><code>requirements = fastai==2.7.17</code></pre>
+<p>or</p>
+<pre><code>requirements = fastai&gt;=2.7.17</code></pre>
+<p>If there are new libraries, add them to the same line, separated by ‘<space>’. For example:</space></p>
+<pre><code>requirements = fastai pandas</code></pre>
+</section>
+<section id="notebook-content-2" class="level3">
+<h3 class="anchored" data-anchor-id="notebook-content-2">Notebook Content</h3>
+<section id="experimental-notebook-1" class="level4">
+<h4 class="anchored" data-anchor-id="experimental-notebook-1">Experimental notebook…</h4>
+</section>
+<section id="module-1" class="level4">
+<h4 class="anchored" data-anchor-id="module-1">Module</h4>
+<hr>
+<p><a href="https://github.com/ninjalabo/nbdev-test/blob/main/nbdev_test/classifer.py#L59" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+</section>
+<section id="catordogimageclassifier" class="level3">
+<h3 class="anchored" data-anchor-id="catordogimageclassifier">CatOrDogImageClassifier</h3>
+<blockquote class="blockquote">
+<pre><code> CatOrDogImageClassifier (arch=&lt;function resnet34&gt;, metrics=&lt;function
+                          error_rate&gt;)</code></pre>
+</blockquote>
+<p><em>Classifier between cat and dog images</em></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>arch</td>
+<td>function</td>
+<td>resnet34</td>
+<td>Pretrained model architecture</td>
+</tr>
+<tr class="even">
+<td>metrics</td>
+<td>function</td>
+<td>error_rate</td>
+<td>Metrics to be used</td>
+</tr>
+</tbody>
+</table>
+<div id="09d9588b-b1ed-45ab-8520-63742b95a919" class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">NOTE</span><span class="co">: it is not required to export this use case with test.</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Use case</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>classifer <span class="op">=</span> CatOrDogImageClassifier()</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>label, dog_prob, cat_prob <span class="op">=</span> classifer.predict(<span class="st">"images/cat.jpg"</span>)</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Image should be predicted as 'Cat'</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> label<span class="op">==</span><span class="st">'Cat'</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> cat_prob <span class="op">&gt;</span> <span class="fl">0.5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">epoch</th>
+<th data-quarto-table-cell-role="th">train_loss</th>
+<th data-quarto-table-cell-role="th">valid_loss</th>
+<th data-quarto-table-cell-role="th">error_rate</th>
+<th data-quarto-table-cell-role="th">time</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>0.147156</td>
+<td>0.022813</td>
+<td>0.008119</td>
+<td>00:13</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">epoch</th>
+<th data-quarto-table-cell-role="th">train_loss</th>
+<th data-quarto-table-cell-role="th">valid_loss</th>
+<th data-quarto-table-cell-role="th">error_rate</th>
+<th data-quarto-table-cell-role="th">time</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>0.051962</td>
+<td>0.031823</td>
+<td>0.011502</td>
+<td>00:17</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div>
+<div class="cell-output cell-output-display">
+
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The animal in this picture is: Cat
+Probability of 'Dog': 0.000073
+Probability of 'Cat': 0.999927</code></pre>
+</div>
+</div>
+<div id="ad44c38b-4e39-44c3-9c36-a3e72bf7042d" class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Export via cell</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> nbdev <span class="im">import</span> nbdev_export</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>nbdev_export()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="change-in-nbdev_test-module" class="level3">
+<h3 class="anchored" data-anchor-id="change-in-nbdev_test-module">Change in <code>nbdev_test</code> module</h3>
+<p>After running the previous notebook, there should be a new file named <code>classifier.py</code> in the <code>nbdev_test</code> directory. This new file should include all code from cells with the <code>#| export</code> marker.</p>
+</section>
+</section>
+<section id="step-4---create-documentation" class="level2">
+<h2 class="anchored" data-anchor-id="step-4---create-documentation">Step 4 - Create Documentation</h2>
+<p>At this stage, the developer wants to generate a full documentation of all this process. <code>nbdev</code> simplifies this process with <code>nbdev_preview</code> which generates Quarto Pages for documentation from the notebook. We need to prepare the notebook for documentation generation which should include:</p>
+<ul>
+<li>Add narration with markdown cell<br>
+</li>
+<li>Add directives to cells to determine which cell is visible:
+<ul>
+<li>Add <code>#| export</code> for adding the cell to the module &amp; documentation<br>
+</li>
+<li>Add <code>#| hide</code> for testing cells and <code>nbdev</code> operations cells<br>
+</li>
+<li>For more options, check out the official documents: https://nbdev.fast.ai/explanations/directives.html<br>
+</li>
+</ul></li>
+<li>Use <code>show_doc</code> for displaying class / functions</li>
+<li>Use <code>nbdev_preview</code> for previewing documentation</li>
+<li>Use <code>nbdev_docs</code> for generating documentation in <code>.html</code> format</li>
+</ul>
+<p><strong>NOTE</strong><br>
+After this running the notebook content in this section, the previously exported code will be duplicate as they are being exported to the same file. Usually, one notebook will generate one exported module.</p>
+<section id="notebook-content-3" class="level3">
+<h3 class="anchored" data-anchor-id="notebook-content-3">Notebook Content</h3>
+<div id="a482ca56-1831-40be-bfff-dc2f2388f55e" class="cell">
+<details open="" class="code-fold">
+<summary>Exported source</summary>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fastai.vision.<span class="bu">all</span> <span class="im">import</span> <span class="op">*</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>For this task, we will use the Oxford-IIIT Pet Dataset that contains images of cats and dogs of 37 different breeds. We will first show how to build a simple cat-vs-dog classifier, then a little bit more advanced model that can classify all breeds.</p>
+<p>The dataset can be downloaded and decompressed with this line of code:</p>
+<div id="6c506b04-20e6-45d3-9796-3662a65d5a69" class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>path <span class="op">=</span> untar_data(URLs.PETS)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>It will only do this download once, and return the location of the decompressed archive. We can check what is inside with the <code>.ls()</code> method.</p>
+<p>We will ignore the annotations folder for now, and focus on the images one. get_image_files is a fastai function that helps us grab all the image files (recursively) in one folder.</p>
+<div id="687fc7ae-d403-433e-b1b5-8e76e4413642" class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>files <span class="op">=</span> get_image_files(path<span class="op">/</span><span class="st">"images"</span>)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="bu">len</span>(files)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>7390</code></pre>
+</div>
+</div>
+<p>To label our data for the cats vs dogs problem, we need to know which filenames are of dog pictures and which ones are of cat pictures. There is an easy way to distinguish: the name of the file begins with a capital for cats, and a lowercased letter for dogs.</p>
+<p>We can then define an easy label function:</p>
+<div id="30e03379-8d69-4879-ad7c-681b99d52411" class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> label_func(f): <span class="cf">return</span> f[<span class="dv">0</span>].isupper()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>To get our data ready for a model, we need to put it in a DataLoaders object. Here we have a function that labels using the file names, so we will use ImageDataLoaders.from_name_func. There are other factory methods of ImageDataLoaders that could be more suitable for your problem, so make sure to check them all in vision.data.dls = ImageDataLoaders.from_name_func(path, files, label_func, item_tfms=Resize(224))</p>
+<div id="b4447ab7-0a51-4657-891b-f67e03e67a72" class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>dls <span class="op">=</span> ImageDataLoaders.from_name_func(path, files, label_func, item_tfms<span class="op">=</span>Resize(<span class="dv">224</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We have passed to this function the directory we’re working in, the files we grabbed, our label_func and one last piece as item_tfms: this is a Transform applied on all items of our dataset that will resize each image to 224 by 224, by using a random crop on the largest dimension to make it a square, then resizing to 224 by 224. If we didn’t pass this, we would get an error later as it would be impossible to batch the items together.</p>
+<p>We can then check if everything looks okay with the show_batch method (True is for cat, False is for dog):</p>
+<div id="2a8c3313-ffa2-4dfc-ae1b-0ceff8c07476" class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>dls.show_batch()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02_workflow_files/figure-html/cell-21-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Then we can create a Learner, which is a fastai object that combines the data and a model for training, and uses transfer learning to fine tune a pretrained model in just two lines of code:</p>
+<div id="13153f54-419a-49b4-ab8c-dbd1045fa976" class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>learn <span class="op">=</span> vision_learner(dls, resnet34, metrics<span class="op">=</span>error_rate)</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>learn.fine_tune(<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">epoch</th>
+<th data-quarto-table-cell-role="th">train_loss</th>
+<th data-quarto-table-cell-role="th">valid_loss</th>
+<th data-quarto-table-cell-role="th">error_rate</th>
+<th data-quarto-table-cell-role="th">time</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>0.150823</td>
+<td>0.023608</td>
+<td>0.009472</td>
+<td>00:23</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">epoch</th>
+<th data-quarto-table-cell-role="th">train_loss</th>
+<th data-quarto-table-cell-role="th">valid_loss</th>
+<th data-quarto-table-cell-role="th">error_rate</th>
+<th data-quarto-table-cell-role="th">time</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>0.053443</td>
+<td>0.007796</td>
+<td>0.002706</td>
+<td>00:29</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>The first line downloaded a model called ResNet34, pretrained on ImageNet, and adapted it to our specific problem. It then fine tuned that model and in a relatively short time, we get a model with an error rate of well under 1%… amazing!</p>
+<p>If you want to make a prediction on a new image, you can use learn.predict:</p>
+<div id="e7923cf9-bc44-4139-b98a-a09dc920b74a" class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>learn.predict(files[<span class="dv">0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div>
+<div class="cell-output cell-output-display">
+
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>('False', tensor(0), tensor([9.9995e-01, 5.1299e-05]))</code></pre>
+</div>
+</div>
+<p>The predict method returns three things: the decoded prediction (here False for dog), the index of the predicted class and the tensor of probabilities of all classes in the order of their indexed labels(in this case, the model is quite confident about the being that of a dog). This method accepts a filename, a PIL image or a tensor directly in this case. We can also have a look at some predictions with the show_results method:</p>
+<div id="a8299461-6428-4722-ac2e-32c251e3612b" class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>learn.show_results()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div>
+<div class="cell-output cell-output-display">
+
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02_workflow_files/figure-html/cell-24-output-3.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>From this, we can build a classifer for images of cats and dogs:</p>
+<hr>
+<p><a href="https://github.com/ninjalabo/nbdev-test/blob/main/nbdev_test/classifer.py#L59" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="catordogimageclassifier-1" class="level3">
+<h3 class="anchored" data-anchor-id="catordogimageclassifier-1">CatOrDogImageClassifier</h3>
+<blockquote class="blockquote">
+<pre><code> CatOrDogImageClassifier (arch=&lt;function resnet34&gt;, metrics=&lt;function
+                          error_rate&gt;)</code></pre>
+</blockquote>
+<p><em>Classifier between cat and dog images</em></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>arch</td>
+<td>function</td>
+<td>resnet34</td>
+<td>Pretrained model architecture</td>
+</tr>
+<tr class="even">
+<td>metrics</td>
+<td>function</td>
+<td>error_rate</td>
+<td>Metrics to be used</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><a href="https://github.com/ninjalabo/nbdev-test/blob/main/nbdev_test/classifer.py#L81" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="catordogimageclassifier.predict" class="level3">
+<h3 class="anchored" data-anchor-id="catordogimageclassifier.predict">CatOrDogImageClassifier.predict</h3>
+<blockquote class="blockquote">
+<pre><code> CatOrDogImageClassifier.predict (file_path:str)</code></pre>
+</blockquote>
+<p><em>Predict a single image with the learner</em></p>
+</section>
+</section>
+<section id="tips" class="level2">
+<h2 class="anchored" data-anchor-id="tips">Tips</h2>
+<ul>
+<li><strong>Module Packaging:</strong> Each notebook will only export 1 module (or <code>.py</code> file), which is defined by directive <code>#| default_exp &lt;file_name&gt;</code>. However, it is possible to create sub-module with this directive. For instance, if the <code>file_name</code> is defined as <code>classifier.dog_and_cat</code>, then the created module will be exported to file <code>classifier/dog_and_cat.py</code> and a new directory <code>classifier</code> is automatically created in your main module directory.<br>
+</li>
+<li><strong>Notebook Packaging:</strong> Each notebook will be automatically rendered into a Quarto Page. The order of the notebook is automatically inferred from the title (complying with naming convention: <code>01_notebook1.ipynb</code>, <code>02_notebook2.ipynb</code>. It is also possible to create sections in Quarto Pages by creating a new child directory in the <code>nbs</code> folder with the section name and adding corresponding notebooks to it. It is also possible to customize content structure by editing the <code>sidebar.yml</code> file.<br>
+</li>
+<li><strong>Jupyter Lab Support:</strong> As we are creating module, it can be beneficial to have type hinting and code styling. Check https://chatgpt.com/share/67120f9f-6c58-8002-b10f-7c18d051d2f0 for how to enable such utilities, as well as customizing them for your own environment.</li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/ninjalabo\.github\.io\/nbdev-test");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/ninjalabo/nbdev-test/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
