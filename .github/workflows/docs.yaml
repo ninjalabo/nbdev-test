@@ -1,0 +1,58 @@
+name: Generate nbdev Docs
+
+on:
+  push:
+    branches:
+      - main  # or your main development branch
+
+jobs:
+  build_docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Step 2: Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.11'  # Adjust based on your project's Python version
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: |
+          pip install -U pip
+          pip install jupyterlab
+          pip install nbdev
+          nbdev_install_quarto
+          pip install jupyterlab-quarto
+
+      # Step 4: Generate documentation
+      - name: Generate documentation
+        run: nbdev_docs
+
+      # Step 5: Commit and push files from _docs to the root folder
+      - name: Commit and push docs to root
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Automatically created token
+        run: |
+          # Create a new branch or check out the existing one
+          git checkout -b docs || git checkout docs
+          
+          # Remove everything else from the current branch
+          git rm -rf .
+
+          # Copy all files from _docs to the root folder
+          cp -r _docs/* ./
+
+          # Add and commit changes
+          git config user.name "GitHub Action"
+          git config user.email "action@github.com"
+          git add .
+          git commit -m "Update documentation" || echo "No changes to commit"
+          
+          # Push changes to the docs branch
+          git push --force origin docs
+          
