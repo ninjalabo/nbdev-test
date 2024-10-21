@@ -5,6 +5,10 @@ on:
     branches:
       - main  # or your main development branch
 
+# Explicitly grant write permissions for the repository contents
+permissions:
+    contents: write  # Allows writing to branches
+    
 jobs:
   build_docs:
     runs-on: ubuntu-latest
