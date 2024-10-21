@@ -22,4 +22,4 @@ jobs:
           echo "${{ secrets.SCW_SSH_PASSPHRASE }}" | ssh-add ~/.ssh/id_ed25519
         
       - name: Test SSH connection
-        run: ssh -o StrictHostKeyChecking=no root@51.158.123.189 "echo Connected!"
+        run: ssh root@51.158.123.189 "echo Connected!"
