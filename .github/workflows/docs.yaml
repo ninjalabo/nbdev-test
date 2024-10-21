@@ -67,6 +67,6 @@ jobs:
           if git diff-index --quiet HEAD; then
             echo "No changes to commit."
           else
-            git commit -m "Update documentation"
-            git push origin docs  # Push changes to the docs branch
+            git commit -m "Update documentation [skip ci]"
+            git push --force origin docs  # Force push changes to the docs branch
           fi
